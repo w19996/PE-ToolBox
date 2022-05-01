@@ -1,0 +1,124 @@
+﻿@TEAM ENVI^ EnviMode=1| ENVI^ ForceLocal=1
+CALL $--ret:&DPIA user32.dll,SetProcessDPIAware //设置dpi感知模式
+CALL $--ret:&hdc user32.dll,GetDC,#0  //获取显示器0（一般是主显示器）的句柄
+CALL $--ret:&LOGPIXELSX Gdi32.dll,GetDeviceCaps,#%hdc%,#88     //获取显示器横向DPI，LOGPIXELSX为#88，纵向LOGPIXELSY为#90,两个值是一样的。
+SET &::WM_MOUSEHOVER=0x02A1
+SET &::WM_MOUSELEAVE=0x02A3
+CALL @WIN1
+_SUB SetEdit1
+    BROW REGfile,, 请选择注册表文件, reg
+    FIND $%REGFILE%=,!ENVI @Edit1=%REGFILE%
+_END
+_SUB SetEdit2
+    BROW WCSfile,, 请选择配置文件, WCS文件|*.WCS|INI文件|*.ini|WCZ文件|*.WCZ|所有文件|*.*
+    FIND $%WCSFILE%=,!ENVI @Edit2=%WCSFILE%
+_END
+_SUB WIN1,W660H500,工具箱,,,,,-scale:%&LOGPIXELSX%
+    ENVI @WIN1.Font=12:宋体
+    EDIT. Edit1,L130T20W200H20,,,0x100,,10:宋体
+    ENVI @Edit1.MSG=0x0203:CALL SetEdit1
+    ITEM Item1,L20T20W100H20,REG转换WCS,CALL @regtowcs
+    EDIT. Edit2,L20T65W310H20,,,0x100,,10:宋体
+    ENVI @Edit2.MSG=0x0203:CALL SetEdit2
+    GROU Grou1,L15T45W320H100,PECMD加密
+    ITEM Item3,L20T100W50H20,加密,CALL @encrypt
+    ITEM Item4,L140T100W50H20,压缩,CALL @compress
+    ITEM Item5,L280T100W50H20,解压,CALL @uncompressed
+    ITEM Item6,L365T40W100H25,打开文件位置,CALL @filelocation
+    ITEM Item7,L365T70W100H25,此处打开命令,CALL @CMD
+    ITEM Item8,L490T40W140H25,管理员取得所有权,CALL @permissions
+    ITEM Item18,L490T70W140H25,关联PECMD,CALL @linkpecmd
+    GROU Grou2,L350T20W290H125,注册表添加
+    ITEM Item9,L30T180W50H20,100,TEAM ENVI mdpi=100|CALL @DPI
+    ITEM Item10,L110T180W50H20,125,TEAM ENVI mdpi=125|CALL @DPI
+    ITEM Item11,L190T180W50H20,150,TEAM ENVI mdpi=150|CALL @DPI
+    ITEM Item12,L270T180W50H20,175,TEAM ENVI mdpi=175|CALL @DPI
+    ITEM Item13,L30T210W50H20,200,TEAM ENVI mdpi=200|CALL @DPI
+    ITEM Item14,L110T210W50H20,225,TEAM ENVI mdpi=225|CALL @DPI
+    ITEM Item15,L190T210W50H20,250,TEAM ENVI mdpi=250|CALL @DPI
+    ITEM Item16,L270T210W50H20,300,TEAM ENVI mdpi=300|CALL @DPI
+    GROU Grou3,L15T155W320H90,DPI
+    ITEM Item17,L20T275W80H20,文件提取,CALL @filecopy
+    GROU Grou4,L15T255W320H90,其他工具
+    ENVI @Edit1.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "鼠标双击选择文件"
+    ENVI @Edit1.MSG=%&WM_MOUSELEAVE%: TIPS -
+    ENVI @Edit2.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "鼠标双击选择文件"
+    ENVI @Edit2.MSG=%&WM_MOUSELEAVE%: TIPS -
+_END
+_SUB Mouse_In_TIPS			//气泡显示指定的信息
+	TEAM TIPS -| ENVI &ShowHot=
+	ENVI @%1.POS=?@&CurX:&CurY:@&CurW:&CurH
+	ENVI @@Cur=?&CurXM;&CurYM
+	CALC #&RelX=%&CurX%+%&CurW%
+	CALC #&RelY=%&CurY%+%&CurH%
+	ENVI &ShowHot=%~2
+	TEAM ENVI @@Cur=?&hotL;&hotT| TIPS ,%&ShowHot%,1000000000,1,@AL%&hotL%T%&hotT%
+_END
+_SUB regtowcs
+    LOAD #102 --reg2wcs "%Edit1%"
+_END
+_SUB encrypt
+    FDIR fPath=%Edit2%
+    NAME -ext fNam1=%Edit2%
+    CMPS "%Edit2%" "%fPath%\加密_%fNam1%"
+_END
+_SUB compress
+    FDIR fPath=%Edit2%
+    NAME -ext fNam1=%Edit2%
+    CMPS -m "%Edit2%" "%fPath%\压缩_%fNam1%"
+_END
+_SUB uncompressed
+    FDIR fPath=%Edit2%
+    NAME -ext fNam1=%Edit2%
+    CMPS -u "%Edit2%" "%fPath%\解压_%fNam1%"
+_END
+_SUB filelocation
+    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\=打开文件位置(&E)
+    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\icon=explorer.exe,0
+    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\command\\=cmd /c for /f "delims=" %%%%i in ('find ":" "%%1" ^|findstr /r "^[A-z]:[\\]"')do start explorer /select,"%%%%i"
+_END
+_SUB CMD
+	REGI  $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\=此处打开命令
+	REGI  $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\Icon=cmd.exe
+	REGI  $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\Command\\=cmd.exe
+_END
+_SUB permissions
+	REGI  $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\\Icon=imageres.dll,169
+	REGI  $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\command\\=cmd.exe /c takeown /f "%%1" && icacls "%%1" /grant administrators:F
+	REGI  $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\Icon=imageres.dll,169
+	REGI  $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\command\\=cmd.exe /c takeown /f "%%1" /r /d y && icacls "%%1" /grant administrators:F /t
+_END
+_SUB DPI
+    #code=950T936
+    ^calc #dpi=%mdpi%
+    set$# pvParam=*4 0
+    call $--bool --qd --ret:SystemParametersInfoWRet user32.dll,SystemParametersInfoW,#158,0,*pvParam,1
+    set?ints pvParam=vParam
+    ifex $%dpi%>250, set num=50! set num=25
+    calc #dpix=(%dpi%-100)/%num%+%vParam%
+    call $--qd# user32.dll,SystemParametersInfoW,159,%dpix%,0,1
+_END
+_SUB filecopy
+    LOAD #103
+_END
+_SUB linkpecmd
+    IFEX %SystemRoot%\SYSTEM32\PECMD.NTR ENVI PECMD=PECMD.NTR
+    REGI HKCR\.ntr\=exefile
+    REGI HKCR\.nte\=exefile
+    REGI HKCR\.ntx\=exefile
+    REGI HKCR\.wcs\=wcsfile
+    REGI HKCR\.wce\=wcsfile
+    REGI HKCR\.wcx\=wcsfile
+    REGI HKCR\wcsfile\=WCS 脚本文件
+    REGI HKCR\wcsfile\DefaultIcon\=%SystemRoot%\SYSTEM32\PECMD.exe,0
+    REGI HKCR\wcsfile\shell\open\command\=PECMD LOAD %L
+    REGI HKCR\wcsfile\shell\Edit\command\=notepad %L
+    REGI HKCR\.wcz\=wczfile
+    REGI HKCR\wczfile\=WCZ 脚本文件
+    REGI HKCR\wczfile\DefaultIcon\=%SystemRoot%\SYSTEM32\PECMD.exe,0
+    REGI HKCR\wczfile\shell\open\command\=PECMD.exe LOAD %L
+    REGI HKCR\wczfile\shell\Edit\command\=notepad %L
+    REGI HKCR\inifile\shell\PECMD\=作为PECMD脚本运行
+    REGI HKCR\inifile\shell\PECMD\command\=PECMD.exe LOAD %L
+    REGI HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\PATHEXT=.COM;.EXE;.NTR;.NTE;.NTX;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.WCS;.WCE;.WCX;.WCZ
+_END
