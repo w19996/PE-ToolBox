@@ -26,34 +26,34 @@ _SUB WIN1,W750H500,工具箱,,,,,-scale:%&LOGPIXELSX%
     GROU Grou1,L15T45W320H100,PECMD加密
     ///////////////////////////////////////////////////////
     LABE -left Item6,L365T42W100H25,打开文件位置,
-    REGI --init $ HKCR\lnkfile\shell\OpensLnkFiles\\,of
+    REGI --init $HKCR\lnkfile\shell\OpensLnkFiles\\,of
     IFEX '%of%'='',ENVI &&image1=#2|PNG!ENVI &&image1=#1|PNG
-    IMAG Imag1,L470T40W40H20,%&&image1%,CALL @filelocation
+    IMAG Imag1,L470T40W40H20,%image1%,CALL @filelocation
     ///////////////////////////////////////////////////////
     LABE -left Item7,L365T72W100H25,此处打开命令,
     REGI --init $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\,oc
     IFEX '%oc%'='',ENVI &&image2=#2|PNG!ENVI &&image2=#1|PNG
-    IMAG Imag2,L470T70W40H20,%&&image2%,CALL @CMD
+    IMAG Imag2,L470T70W40H20,%image2%,CALL @CMD
     ///////////////////////////////////////////////////////
     LABE -left Item8,L530T42W135H25,管理员取得所有权,
     REGI --init $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\,管权
     IFEX '%管权%'='',ENVI &&image3=#2|PNG!ENVI &&image3=#1|PNG
-    IMAG Imag3,L670T40W40H20,%&&image3%,CALL @permissions
+    IMAG Imag3,L670T40W40H20,%image3%,CALL @permissions
     ///////////////////////////////////////////////////////
     LABE -left Item18,L530T72W140H25,关    联   PECMD,
-    REGI --init $HKCR\.wcs\,wf
+    REGI --init HKCR\wcsfile\shell\open\command\,wf
     IFEX '%wf%'='',ENVI &&image4=#2|PNG!ENVI &&image4=#1|PNG
-    IMAG Imag4,L670T70W40H20,%&&image4%,CALL @linkpecmd
+    IMAG Imag4,L670T70W40H20,%image4%,CALL @linkpecmd
     ///////////////////////////////////////////////////////
     LABE -left Item19,L365T102W100H25,自 动  排 列,
     REGI --init #HKU\.DEFAULT\Software\Microsoft\Windows\Shell\Bags\1\Desktop\\FFlags,auto
     IFEX '%auto%'='0x40200224',ENVI &&image5=#2|PNG!ENVI &&image5=#1|PNG
-    IMAG Imag5,L470T100W40H20,%&&image5%,CALL @offautosrrange
+    IMAG Imag5,L470T100W40H20,%image5%,CALL @offautosrrange
     ///////////////////////////////////////////////////////
     LABE -left Item20,L530T102W140H25,任务栏资源管理器,
     REGI --init @HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband\Favorites,exp
-    IFEX $%exp%=0,ENVI &&image6=#2|PNG!ENVI &&image6=#1|PNG
-    IMAG Imag6,L670T100W40H20,%&&image6%,CALL @nofixedexplorer
+    IFEX '%exp%'='0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00',ENVI &&image6=#2|PNG!ENVI &&image6=#1|PNG
+    IMAG Imag6,L670T100W40H20,%image6%,CALL @nofixedexplorer
     ///////////////////////////////////////////////////////
     GROU Grou2,L350T20W380H125,注册表添加
     ITEM Item9,L30T180W50H20,100,TEAM ENVI mdpi=100|CALL @DPI
@@ -70,7 +70,9 @@ _SUB WIN1,W750H500,工具箱,,,,,-scale:%&LOGPIXELSX%
     LABE Lame1,L355T177W65H20,调整亮度
     EDIT. Edit3,L420T175W30H20,,CALL @brightness
     ITEM Item21,L455T172W50H25,设置,CALL @brightness
-    GROU Grou5,L350T155W290H90,WinXShell
+    GROU Grou5,L350T155W200H90,WinXShell
+    ITEM Item17,L610T185W50H30,执行,TEAM KILL explorer|EXEC explorer
+    GROU Grou6,L555T155W175H90,重启资源管理器
     ENVI @Edit1.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "鼠标双击选择文件"
     ENVI @Edit1.MSG=%&WM_MOUSELEAVE%: TIPS -
     ENVI @Edit2.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "鼠标双击选择文件"
@@ -168,6 +170,7 @@ _SUB DPI
     ifex $%dpi%>250, set num=50! set num=25
     calc #dpix=(%dpi%-100)/%num%+%vParam%
     call $--qd# user32.dll,SystemParametersInfoW,159,%dpix%,0,1
+    KILL explorer
 _END
 _SUB filecopy
     LOAD #103
@@ -240,7 +243,7 @@ _SUB nofixedexplorer
     IFEX '%image6%'='#1|PNG',{
     ENVI @Imag6.update=:::::;#2|PNG
     ENVI image6=#2|PNG
-    REGI @HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband\Favorites=hex(3):FF
+    REGI @HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband\Favorites=0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
     kill explorer
     EXIT
     }
