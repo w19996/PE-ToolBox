@@ -13,7 +13,7 @@ _SUB SetEdit2
     BROW WCSfile,, 请选择配置文件, WCS文件|*.WCS|INI文件|*.ini|WCZ文件|*.WCZ|所有文件|*.*
     FIND $%WCSFILE%=,!ENVI @Edit2=%WCSFILE%
 _END
-_SUB WIN1,W750H500,工具箱,,,,,-scale:%&LOGPIXELSX%
+_SUB WIN1,W750H500,工具箱,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
     ENVI @WIN1.Font=12:宋体
     EDIT. Edit1,L130T20W200H20,,,0x100,,10:宋体
     ENVI @Edit1.MSG=0x0203:CALL SetEdit1
@@ -46,13 +46,14 @@ _SUB WIN1,W750H500,工具箱,,,,,-scale:%&LOGPIXELSX%
     IMAG Imag4,L670T70W40H20,%image4%,CALL @linkpecmd
     ///////////////////////////////////////////////////////
     LABE -left Item19,L365T102W100H25,自 动  排 列,
+    ENVI ?pe=ispe
     REGI --init #HKU\.DEFAULT\Software\Microsoft\Windows\Shell\Bags\1\Desktop\\FFlags,auto
-    IFEX '%auto%'='0x40200224',ENVI &&image5=#2|PNG!ENVI &&image5=#1|PNG
+    IFEX ['%auto%'='0x40200225' & $%pe%=2],ENVI &&image5=#1|PNG!ENVI &&image5=#2|PNG
     IMAG Imag5,L470T100W40H20,%image5%,CALL @offautosrrange
     ///////////////////////////////////////////////////////
     LABE -left Item20,L530T102W140H25,任务栏资源管理器,
     REGI --init @HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband\Favorites,exp
-    IFEX '%exp%'='0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00',ENVI &&image6=#2|PNG!ENVI &&image6=#1|PNG
+    IFEX ['%exp%'='0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00' | '%exp%'=''],ENVI &&image6=#2|PNG!ENVI &&image6=#1|PNG
     IMAG Imag6,L670T100W40H20,%image6%,CALL @nofixedexplorer
     ///////////////////////////////////////////////////////
     GROU Grou2,L350T20W380H125,注册表添加
@@ -111,9 +112,7 @@ _SUB filelocation
     IFEX '%image1%'='#1|PNG',{
     ENVI @Imag1.update=:::::;#2|PNG
     ENVI image1=#2|PNG
-    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\=
-    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\icon=
-    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\command\\=
+    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\!
     EXIT
     }
     IFEX '%image1%'='#2|PNG',{
@@ -127,9 +126,7 @@ _SUB CMD
     IFEX '%image2%'='#1|PNG',{
     ENVI @Imag2.update=:::::;#2|PNG
     ENVI image2=#2|PNG
-    REGI $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\=
-    REGI $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\Icon=
-    REGI $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\Command\\=
+    REGI $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\!
     EXIT
     }
     IFEX '%image2%'='#2|PNG',{
@@ -143,12 +140,8 @@ _SUB permissions
     IFEX '%image3%'='#1|PNG',{
     ENVI @Imag3.update=:::::;#2|PNG
     ENVI image3=#2|PNG
-    REGI  $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\\=
-    REGI  $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\\Icon=
-    REGI  $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\command\\=
-    REGI  $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\=
-    REGI  $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\Icon=
-    REGI  $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\command\\=
+    REGI  $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\\!
+    REGI  $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\!
     EXIT
     }
     IFEX '%image3%'='#2|PNG',{
