@@ -16,12 +16,20 @@ _SUB SetEdit2
     FIND $%WCSFILE%=,!ENVI @Edit2=%WCSFILE%
 _END
 _SUB SetEdit4
-    BROW MntDir1,*%Edit4%, 请选择源文件目录
+    BROW MntDir1,*%Edit4%, 请选镜像文件目录
     FIND $%Mntdir1%=,!ENVI @Edit4=%Mntdir1%
 _END
 _SUB SetEdit5
-BROW Wimfile,&, 请选择一个打开文件, wim
-FIND $%WIMFILE%=,!ENVI @Edit5=%WIMFILE%
+BROW Wimfile1,&, 请选择目录保存文件, wim
+FIND $%WIMFILE1%=,!ENVI @Edit5=%WIMFILE1%
+_END
+_SUB SetEdit6
+    BROW Wimfile2,, 请选WIM文件, wim文件|*.wim|esd文件|*.esd
+    FIND $%WimFILE2%=,!ENVI @Edit6=%Wimfile2%
+_END
+_SUB SetEdit7
+    BROW MntDir2,*%Edit7%, 请选解包目录
+    FIND $%Mntdir2%=,!ENVI @Edit7=%Mntdir2%
 _END
 _SUB WIN1,W%w1%H535,工具箱,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
     ENVI @WIN1.Font=12:宋体  
@@ -80,13 +88,20 @@ _SUB WIN1,W%w1%H535,工具箱,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
     GROU Grou3,L15T155W320H90,DPI
     ITEM Item17,L20T275W80H20,文件提取,CALL @filecopy
     GROU Grou4,L15T255W320H90,其他工具
-    LABE Labe21,L20T380W70H20,添加路径
+    LABE Labe21,L20T380W70H20,来源路径
     LABE Labe22,L20T406W70H20,输出路径
+    RADI Radi1,L90T460W50H20,打包,TEAM ENVI @Edit4.Visible=1|ENVI @Edit5.Visible=1|ENVI @Edit6.Visible=0|ENVI @Edit7.Visible=0
+    ENVI @Radi1.Check=1
+    RADI Radi2,L270T460W50H20,解包,TEAM ENVI @Edit6.Visible=1|ENVI @Edit7.Visible=1|ENVI @Edit4.Visible=0|ENVI @Edit5.Visible=0
     EDIT. Edit4,L90T379W230H20,,,0x100,,10:宋体
-    ENVI @Edit4.MSG=0x0203:CALL SetEdit4
+    ENVI @Edit4.MSG=0x0203:CALL SetEdit4 
     EDIT. Edit5,L90T404W230H20,,,0x100,,10:宋体
     ENVI @Edit5.MSG=0x0203:CALL SetEdit5
-    ITEM Item28,L89T460W50H20,打包,CALL @wimlibcapture
+    EDIT. Edit6,L90T379W230H20,,,0x100,,10:宋体
+    ENVI @Edit6.MSG=0x0203:CALL SetEdit6
+    EDIT. Edit7,L90T404W230H20,,,0x100,,10:宋体
+    ENVI @Edit7.MSG=0x0203:CALL SetEdit7  
+    ITEM Item28,L20T460W50H20,执行,CALL @wimstart
     PBAR Pbar1,L90T430W230H20,
     LABE Labe23,L20T431W70H20,完成进度
     GROU Grou8,L15T355W320H135,wimlib
@@ -131,18 +146,18 @@ _SUB regtowcs
     LOAD #102 --reg2wcs "%Edit1%"
 _END
 _SUB encrypt
-    FDIR fPath=%Edit2%
-    NAME -ext fNam1=%Edit2%
+    FDIR fPath="%Edit2%"
+    NAME -ext fNam1="%Edit2%"
     CMPS "%Edit2%" "%fPath%\加密_%fNam1%"
 _END
 _SUB compress
-    FDIR fPath=%Edit2%
-    NAME -ext fNam1=%Edit2%
+    FDIR fPath="%Edit2%"
+    NAME -ext fNam1="%Edit2%"
     CMPS -m "%Edit2%" "%fPath%\压缩_%fNam1%"
 _END
 _SUB uncompressed
-    FDIR fPath=%Edit2%
-    NAME -ext fNam1=%Edit2%
+    FDIR fPath="%Edit2%"
+    NAME -ext fNam1="%Edit2%"
     CMPS -u "%Edit2%" "%fPath%\解压_%fNam1%"
 _END
 _SUB filelocation
@@ -287,13 +302,40 @@ _END
 _SUB brightness
     EXEC %ProgramFiles%\WinXShell\WinXShell.exe -code Screen:Set('brightness',%Edit3%)
 _END
+_SUB wimstart
+    FIND $%Radi1.Check%=1,CALL @wimlibcapture
+    FIND $%Radi2.Check%=1,CALL @wimlibapply 
+_END    
 _SUB wimlibcapture
-    EXEC* -err+ -code:ANSI -cmd:OnTransNL  --exe:*cab:#100:wimlib-imagex.exe &OutVar=!wimlib-imagex.exe capture %Edit4% %Edit5% --boot --check
+    EXEC* -err+ -code:ANSI -cmd:OnTransNL1  --exe:*cab:#100:wimlib-imagex.exe &OutVar1=!wimlib-imagex.exe capture "%Edit4%" "%Edit5%" --boot
 _END
-_SUB OnTransNL *
+_SUB wimlibapply
+    EXEC* -err+ -code:ANSI -cmd:OnTransNL2  --exe:*cab:#100:wimlib-imagex.exe &OutVar2=!wimlib-imagex.exe apply %Edit6% %Edit7%
+_END
+_SUB OnTransNL1 *
 //MESS. aaa
-    SED &&下载内容=0,\n,\r\n,%&OutVar%
+    SED &&下载内容=0,\n,\r\n,%&OutVar1%
     LPOS* * ,*&定位行数=Archiving,,&下载内容
+    MSTR &最后一行=<-1>%&定位行数%
+//MESS. %&最后一行%
+    FIND |%&最后一行%>0,
+    {*
+    READ  -,%&最后一行%,&内容,%&下载内容%
+    MSTR &进度=<9>%&内容%
+
+    MSTR -delims:( &百分比=<2>%&进度%
+    LPOS &百分比数=%,1,%&百分比%
+    CALC &百分比数=%&百分比数%-1
+    MSTR &百分比=1,%&百分比数%,%&百分比%
+    ENVI &PA=%&百分比%%
+    ENVI @Pbar1=%&百分比%;#0X000000:已完成%&PA%
+    }
+//MESS. %&百分比%
+_END
+_SUB OnTransNL2 *
+//MESS. aaa
+    SED &&下载内容=0,\n,\r\n,%&OutVar2%
+    LPOS* * ,*&定位行数=Extracting,,&下载内容
     MSTR &最后一行=<-1>%&定位行数%
 //MESS. %&最后一行%
     FIND |%&最后一行%>0,
