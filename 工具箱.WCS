@@ -15,7 +15,15 @@ _SUB SetEdit2
     BROW WCSfile,, 请选择配置文件, WCS文件|*.WCS|INI文件|*.ini|WCZ文件|*.WCZ|所有文件|*.*
     FIND $%WCSFILE%=,!ENVI @Edit2=%WCSFILE%
 _END
-_SUB WIN1,W%w1%H500,工具箱,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
+_SUB SetEdit4
+    BROW MntDir1,*%Edit4%, 请选择源文件目录
+    FIND $%Mntdir1%=,!ENVI @Edit4=%Mntdir1%
+_END
+_SUB SetEdit5
+BROW Wimfile,&, 请选择一个打开文件, wim
+FIND $%WIMFILE%=,!ENVI @Edit5=%WIMFILE%
+_END
+_SUB WIN1,W%w1%H535,工具箱,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
     ENVI @WIN1.Font=12:宋体  
     ITEM Item0,L305T0W30H15,>>,TEAM ENVI @this.pos=::@(765*%&LOGPIXELSX%/96)|ENVI @Item0.Visible=0
     IFEX '%pe%'='2',ENVI @Item0.Visible=0
@@ -57,7 +65,7 @@ _SUB WIN1,W%w1%H500,工具箱,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
     ///////////////////////////////////////////////////////
     LABE -left Item20,L545T122W140H25,任务栏资源管理器,
     REGI --init @HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband\Favorites,exp
-    IFEX ['%exp%'='0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00' | '%exp%'=''],ENVI &&image6=#2|PNG!ENVI &&image6=#1|PNG
+    IFEX ['%exp%'='0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00' | '%exp%'='' | '%pe%'='0'],ENVI &&image6=#2|PNG!ENVI &&image6=#1|PNG
     IMAG Imag6,L685T120W40H20,%image6%,CALL @nofixedexplorer
     ///////////////////////////////////////////////////////
     GROU Grou2,L370T40W375H125,注册表添加
@@ -72,7 +80,17 @@ _SUB WIN1,W%w1%H500,工具箱,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
     GROU Grou3,L15T155W320H90,DPI
     ITEM Item17,L20T275W80H20,文件提取,CALL @filecopy
     GROU Grou4,L15T255W320H90,其他工具
-    LABE Lame1,L375T197W65H20,调整亮度
+    LABE Labe21,L20T380W70H20,添加路径
+    LABE Labe22,L20T406W70H20,输出路径
+    EDIT. Edit4,L90T379W230H20,,,0x100,,10:宋体
+    ENVI @Edit4.MSG=0x0203:CALL SetEdit4
+    EDIT. Edit5,L90T404W230H20,,,0x100,,10:宋体
+    ENVI @Edit5.MSG=0x0203:CALL SetEdit5
+    ITEM Item28,L89T460W50H20,打包,CALL @wimlibcapture
+    PBAR Pbar1,L90T430W230H20,
+    LABE Labe23,L20T431W70H20,完成进度
+    GROU Grou8,L15T355W320H135,wimlib
+    LABE Labe1,L375T197W65H20,调整亮度
     EDIT. Edit3,L440T195W30H20
     ITEM Item21,L475T192W50H25,设置,CALL @brightness
     ITEM Item22,L385T222W30H20,30,TEAM ENVI @Edit3=30|CALL @brightness
@@ -91,6 +109,14 @@ _SUB WIN1,W%w1%H500,工具箱,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
     ENVI @Edit2.MSG=%&WM_MOUSELEAVE%: TIPS -
     ENVI @Edit3.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "填入亮度数值"
     ENVI @Edit3.MSG=%&WM_MOUSELEAVE%: TIPS -
+    ENVI @Item0.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "展开更多"
+    ENVI @Item0.MSG=%&WM_MOUSELEAVE%: TIPS -
+    ENVI @Item01.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "折叠"
+    ENVI @Item01.MSG=%&WM_MOUSELEAVE%: TIPS -
+    ENVI @Edit4.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "鼠标双击选择路径"
+    ENVI @Edit4.MSG=%&WM_MOUSELEAVE%: TIPS -
+    ENVI @Edit5.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "鼠标双击选择路径"
+    ENVI @Edit5.MSG=%&WM_MOUSELEAVE%: TIPS -
 _END
 _SUB Mouse_In_TIPS			//气泡显示指定的信息
     TEAM TIPS -| ENVI &ShowHot=
@@ -123,15 +149,15 @@ _SUB filelocation
     IFEX '%image1%'='#1|PNG',{
     ENVI @Imag1.update=:::::;#2|PNG
     ENVI image1=#2|PNG
-    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\!
+    REGI $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\!
     EXIT
     }
     IFEX '%image1%'='#2|PNG',{
     ENVI @Imag1.update=:::::;#1|PNG
     ENVI image1=#1|PNG
-    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\=打开文件位置(&E)
-    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\icon=explorer.exe,0
-    REGI  $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\command\\=cmd /c for /f "delims=" %%%%i in ('find ":" "%%1" ^|findstr /r "^[A-z]:[\\]"')do start explorer /select,"%%%%i"
+    REGI $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\=打开文件位置(&E)
+    REGI $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\icon=explorer.exe,0
+    REGI $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\command\\=cmd /c for /f "delims=" %%%%i in ('find ":" "%%1" ^|findstr /r "^[A-z]:[\\]"')do start explorer /select,"%%%%i"
 _END
 _SUB CMD
     IFEX '%image2%'='#1|PNG',{
@@ -151,19 +177,19 @@ _SUB permissions
     IFEX '%image3%'='#1|PNG',{
     ENVI @Imag3.update=:::::;#2|PNG
     ENVI image3=#2|PNG
-    REGI  $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\\!
-    REGI  $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\!
+    REGI $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\\!
+    REGI $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\!
     EXIT
     }
     IFEX '%image3%'='#2|PNG',{
     ENVI @Imag3.update=:::::;#1|PNG
     ENVI image3=#1|PNG
-    REGI  $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\\=管理员取得所有权
-    REGI  $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\\Icon=imageres.dll,169
-    REGI  $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\command\\=cmd.exe /c takeown /f "%%1" && icacls "%%1" /grant administrators:F
-    REGI  $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\=管理员取得所有权
-    REGI  $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\Icon=imageres.dll,169
-    REGI  $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\command\\=cmd.exe /c takeown /f "%%1" /r /d y && icacls "%%1" /grant administrators:F /t
+    REGI $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\\=管理员取得所有权
+    REGI $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\\Icon=imageres.dll,169
+    REGI $HKEY_CLASSES_ROOT\*\shell\管理员取得所有权\command\\=cmd.exe /c takeown /f "%%1" && icacls "%%1" /grant administrators:F
+    REGI $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\=管理员取得所有权
+    REGI $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\\Icon=imageres.dll,169
+    REGI $HKEY_CLASSES_ROOT\Directory\shell\管理员取得所有权\command\\=cmd.exe /c takeown /f "%%1" /r /d y && icacls "%%1" /grant administrators:F /t
 _END
 _SUB DPI
     #code=950T936
@@ -260,4 +286,27 @@ _SUB nofixedexplorer
 _END
 _SUB brightness
     EXEC %ProgramFiles%\WinXShell\WinXShell.exe -code Screen:Set('brightness',%Edit3%)
+_END
+_SUB wimlibcapture
+    EXEC* -err+ -code:ANSI -cmd:OnTransNL  --exe:*cab:#100:wimlib-imagex.exe &OutVar=!wimlib-imagex.exe capture %Edit4% %Edit5% --boot --check
+_END
+_SUB OnTransNL *
+//MESS. aaa
+    SED &&下载内容=0,\n,\r\n,%&OutVar%
+    LPOS* * ,*&定位行数=Archiving,,&下载内容
+    MSTR &最后一行=<-1>%&定位行数%
+//MESS. %&最后一行%
+    FIND |%&最后一行%>0,
+    {*
+    READ  -,%&最后一行%,&内容,%&下载内容%
+    MSTR &进度=<9>%&内容%
+
+    MSTR -delims:( &百分比=<2>%&进度%
+    LPOS &百分比数=%,1,%&百分比%
+    CALC &百分比数=%&百分比数%-1
+    MSTR &百分比=1,%&百分比数%,%&百分比%
+    ENVI &PA=%&百分比%%
+    ENVI @Pbar1=%&百分比%;#0X000000:已完成%&PA%
+    }
+//MESS. %&百分比%
 _END
