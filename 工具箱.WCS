@@ -1,82 +1,82 @@
 //@TEAM ENVI^ EnviMode=1| ENVI^ ForceLocal=1
-CALL $--ret:&DPIA user32.dll,SetProcessDPIAware //è®¾ç½®dpiæ„ŸçŸ¥æ¨¡å¼
-CALL $--ret:&hdc user32.dll,GetDC,#0  //è·å–æ˜¾ç¤ºå™¨0ï¼ˆä¸€èˆ¬æ˜¯ä¸»æ˜¾ç¤ºå™¨ï¼‰çš„å¥æŸ„
-CALL $--ret:&LOGPIXELSX Gdi32.dll,GetDeviceCaps,#%hdc%,#88     //è·å–æ˜¾ç¤ºå™¨æ¨ªå‘DPIï¼ŒLOGPIXELSXä¸º#88ï¼Œçºµå‘LOGPIXELSYä¸º#90,ä¸¤ä¸ªå€¼æ˜¯ä¸€æ ·çš„ã€‚
+CALL $--ret:&DPIA user32.dll,SetProcessDPIAware //ÉèÖÃdpi¸ĞÖªÄ£Ê½
+CALL $--ret:&hdc user32.dll,GetDC,#0  //»ñÈ¡ÏÔÊ¾Æ÷0£¨Ò»°ãÊÇÖ÷ÏÔÊ¾Æ÷£©µÄ¾ä±ú
+CALL $--ret:&LOGPIXELSX Gdi32.dll,GetDeviceCaps,#%hdc%,#88     //»ñÈ¡ÏÔÊ¾Æ÷ºáÏòDPI£¬LOGPIXELSXÎª#88£¬×İÏòLOGPIXELSYÎª#90,Á½¸öÖµÊÇÒ»ÑùµÄ¡£
 SET &::WM_MOUSEHOVER=0x02A1
 SET &::WM_MOUSELEAVE=0x02A3
 ENVI ?pe=ispe
 IFEX '%pe%'='2',SET w1=765!SET w1=350
 CALL @WIN1
 _SUB SetEdit1
-    BROW REGfile,, è¯·é€‰æ‹©æ³¨å†Œè¡¨æ–‡ä»¶, reg
+    BROW REGfile,, ÇëÑ¡Ôñ×¢²á±íÎÄ¼ş, reg
     FIND $%REGFILE%=,!ENVI @Edit1=%REGFILE%
 _END
 _SUB SetEdit2
-    BROW WCSfile,, è¯·é€‰æ‹©é…ç½®æ–‡ä»¶, WCSæ–‡ä»¶|*.WCS|INIæ–‡ä»¶|*.ini|WCZæ–‡ä»¶|*.WCZ|æ‰€æœ‰æ–‡ä»¶|*.*
+    BROW WCSfile,, ÇëÑ¡ÔñÅäÖÃÎÄ¼ş, WCSÎÄ¼ş|*.WCS|INIÎÄ¼ş|*.ini|WCZÎÄ¼ş|*.WCZ|ËùÓĞÎÄ¼ş|*.*
     FIND $%WCSFILE%=,!ENVI @Edit2=%WCSFILE%
 _END
 _SUB SetEdit4
-    BROW MntDir1,*%Edit4%, è¯·é€‰é•œåƒæ–‡ä»¶ç›®å½•
+    BROW MntDir1,*%Edit4%, ÇëÑ¡¾µÏñÎÄ¼şÄ¿Â¼
     FIND $%Mntdir1%=,!ENVI @Edit4=%Mntdir1%
 _END
 _SUB SetEdit5
-BROW Wimfile1,&, è¯·é€‰æ‹©ç›®å½•ä¿å­˜æ–‡ä»¶, wim
+BROW Wimfile1,&, ÇëÑ¡ÔñÄ¿Â¼±£´æÎÄ¼ş, wimÎÄ¼ş|*.wim|esdÎÄ¼ş|*.esd|ËùÓĞÎÄ¼ş|*.*
 FIND $%WIMFILE1%=,!ENVI @Edit5=%WIMFILE1%
 _END
 _SUB SetEdit6
-    BROW Wimfile2,, è¯·é€‰WIMæ–‡ä»¶, wimæ–‡ä»¶|*.wim|esdæ–‡ä»¶|*.esd
+    BROW Wimfile2,, ÇëÑ¡WIMÎÄ¼ş, wimÎÄ¼ş|*.wim|esdÎÄ¼ş|*.esd
     FIND $%WimFILE2%=,!ENVI @Edit6=%Wimfile2%
 _END
 _SUB SetEdit7
-    BROW MntDir2,*%Edit7%, è¯·é€‰è§£åŒ…ç›®å½•
+    BROW MntDir2,*%Edit7%, ÇëÑ¡½â°üÄ¿Â¼
     FIND $%Mntdir2%=,!ENVI @Edit7=%Mntdir2%
 _END
-_SUB WIN1,W%w1%H535,å·¥å…·ç®±,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
-    ENVI @WIN1.Font=12:å®‹ä½“  
+_SUB WIN1,W%w1%H535,¹¤¾ßÏä,KILL *%varname%,,,,-scale:%&LOGPIXELSX%
+    ENVI @WIN1.Font=12:ËÎÌå  
     ITEM Item0,L305T0W30H15,>>,TEAM ENVI @this.pos=::@(765*%&LOGPIXELSX%/96)|ENVI @Item0.Visible=0
     IFEX '%pe%'='2',ENVI @Item0.Visible=0
     ITEM Item01,L365T0W30H15,<<,TEAM ENVI @this.pos=::@(350*%&LOGPIXELSX%/96)|ENVI @Item0.Visible=1
-    EDIT. Edit1,L130T20W200H20,,,0x100,,10:å®‹ä½“
+    EDIT. Edit1,L130T20W200H20,,,0x100,,10:ËÎÌå
     ENVI @Edit1.MSG=0x0203:CALL SetEdit1
-    ITEM Item1,L20T20W100H20,REGè½¬æ¢WCS,CALL @regtowcs
-    EDIT. Edit2,L20T65W310H20,,,0x100,,10:å®‹ä½“
+    ITEM Item1,L20T20W100H20,REG×ª»»WCS,CALL @regtowcs
+    EDIT. Edit2,L20T65W310H20,,,0x100,,10:ËÎÌå
     ENVI @Edit2.MSG=0x0203:CALL SetEdit2
-    ITEM Item3,L20T100W50H20,åŠ å¯†,CALL @encrypt
-    ITEM Item4,L140T100W50H20,å‹ç¼©,CALL @compress
-    ITEM Item5,L280T100W50H20,è§£å‹,CALL @uncompressed
-    GROU Grou1,L15T45W320H100,PECMDåŠ å¯†
+    ITEM Item3,L20T100W50H20,¼ÓÃÜ,CALL @encrypt
+    ITEM Item4,L140T100W50H20,Ñ¹Ëõ,CALL @compress
+    ITEM Item5,L280T100W50H20,½âÑ¹,CALL @uncompressed
+    GROU Grou1,L15T45W320H100,PECMD¼ÓÃÜ
     ///////////////////////////////////////////////////////
-    LABE -left Item6,L380T62W100H25,æ‰“å¼€æ–‡ä»¶ä½ç½®,
+    LABE -left Item6,L380T62W100H25,´ò¿ªÎÄ¼şÎ»ÖÃ,
     REGI --init $HKCR\lnkfile\shell\OpensLnkFiles\\,of
     IFEX '%of%'='',ENVI &&image1=#2|PNG!ENVI &&image1=#1|PNG
     IMAG Imag1,L485T60W40H20,%image1%,CALL @filelocation
     ///////////////////////////////////////////////////////
-    LABE -left Item7,L380T92W100H25,æ­¤å¤„æ‰“å¼€å‘½ä»¤,
+    LABE -left Item7,L380T92W100H25,´Ë´¦´ò¿ªÃüÁî,
     REGI --init $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\,oc
     IFEX '%oc%'='',ENVI &&image2=#2|PNG!ENVI &&image2=#1|PNG
     IMAG Imag2,L485T90W40H20,%image2%,CALL @CMD
     ///////////////////////////////////////////////////////
-    LABE -left Item8,L545T62W135H25,ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ,
-    REGI --init $HKEY_CLASSES_ROOT\Directory\shell\ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ\\,ç®¡æƒ
-    IFEX '%ç®¡æƒ%'='',ENVI &&image3=#2|PNG!ENVI &&image3=#1|PNG
+    LABE -left Item8,L545T62W135H25,¹ÜÀíÔ±È¡µÃËùÓĞÈ¨,
+    REGI --init $HKEY_CLASSES_ROOT\Directory\shell\¹ÜÀíÔ±È¡µÃËùÓĞÈ¨\\,¹ÜÈ¨
+    IFEX '%¹ÜÈ¨%'='',ENVI &&image3=#2|PNG!ENVI &&image3=#1|PNG
     IMAG Imag3,L685T60W40H20,%image3%,CALL @permissions
     ///////////////////////////////////////////////////////
-    LABE -left Item18,L545T92W140H25,å…³    è”   PECMD,
+    LABE -left Item18,L545T92W140H25,¹Ø    Áª   PECMD,
     REGI --init HKCR\wcsfile\shell\open\command\,wf
     IFEX '%wf%'='',ENVI &&image4=#2|PNG!ENVI &&image4=#1|PNG
     IMAG Imag4,L685T90W40H20,%image4%,CALL @linkpecmd
     ///////////////////////////////////////////////////////
-    LABE -left Item19,L380T122W100H25,è‡ª åŠ¨  æ’ åˆ—,
+    LABE -left Item19,L380T122W100H25,×Ô ¶¯  ÅÅ ÁĞ,
     REGI --init #HKU\.DEFAULT\Software\Microsoft\Windows\Shell\Bags\1\Desktop\\FFlags,auto
     IFEX ['%auto%'='0x40200225' & $%pe%=2],ENVI &&image5=#1|PNG!ENVI &&image5=#2|PNG
     IMAG Imag5,L485T120W40H20,%image5%,CALL @offautosrrange
     ///////////////////////////////////////////////////////
-    LABE -left Item20,L545T122W140H25,ä»»åŠ¡æ èµ„æºç®¡ç†å™¨,
+    LABE -left Item20,L545T122W140H25,ÈÎÎñÀ¸×ÊÔ´¹ÜÀíÆ÷,
     REGI --init @HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband\Favorites,exp
     IFEX ['%exp%'='0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00' | '%exp%'='' | '%pe%'='0'],ENVI &&image6=#2|PNG!ENVI &&image6=#1|PNG
     IMAG Imag6,L685T120W40H20,%image6%,CALL @nofixedexplorer
     ///////////////////////////////////////////////////////
-    GROU Grou2,L370T40W375H125,æ³¨å†Œè¡¨æ·»åŠ 
+    GROU Grou2,L370T40W375H125,×¢²á±íÌí¼Ó
     ITEM Item9,L30T180W50H20,100,TEAM ENVI mdpi=100|CALL @DPI
     ITEM Item10,L110T180W50H20,125,TEAM ENVI mdpi=125|CALL @DPI
     ITEM Item11,L190T180W50H20,150,TEAM ENVI mdpi=150|CALL @DPI
@@ -86,28 +86,30 @@ _SUB WIN1,W%w1%H535,å·¥å…·ç®±,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
     ITEM Item15,L190T210W50H20,250,TEAM ENVI mdpi=250|CALL @DPI
     ITEM Item16,L270T210W50H20,300,TEAM ENVI mdpi=300|CALL @DPI
     GROU Grou3,L15T155W320H90,DPI
-    ITEM Item17,L20T275W80H20,æ–‡ä»¶æå–,CALL @filecopy
-    GROU Grou4,L15T255W320H90,å…¶ä»–å·¥å…·
-    LABE Labe21,L20T380W70H20,æ¥æºè·¯å¾„
-    LABE Labe22,L20T406W70H20,è¾“å‡ºè·¯å¾„
-    RADI Radi1,L90T460W50H20,æ‰“åŒ…,TEAM ENVI @Edit4.Visible=1|ENVI @Edit5.Visible=1|ENVI @Edit6.Visible=0|ENVI @Edit7.Visible=0
-    ENVI @Radi1.Check=1
-    RADI Radi2,L270T460W50H20,è§£åŒ…,TEAM ENVI @Edit6.Visible=1|ENVI @Edit7.Visible=1|ENVI @Edit4.Visible=0|ENVI @Edit5.Visible=0
-    EDIT. Edit4,L90T379W230H20,,,0x100,,10:å®‹ä½“
+    ITEM Item17,L20T275W80H20,ÎÄ¼şÌáÈ¡,CALL @filecopy
+    GROU Grou4,L15T255W320H90,ÆäËû¹¤¾ß
+    LABE Labe21,L20T380W70H20,À´Ô´Â·¾¶
+    LABE Labe22,L20T406W70H20,Êä³öÂ·¾¶
+    RADI Radi1,L90T460W50H20,´ò°ü,TEAM ENVI @Edit4.Visible=1|ENVI @Edit5.Visible=1|ENVI @Edit6.Visible=0|ENVI @Edit7.Visible=0|ENVI @Labe22.Visible=1,1
+    //ENVI @Radi1.Check=1
+    RADI Radi2,L270T460W50H20,½â°ü,TEAM ENVI @Edit6.Visible=1|ENVI @Edit7.Visible=1|ENVI @Edit4.Visible=0|ENVI @Edit5.Visible=0|ENVI @Labe22.Visible=1
+    RADI Radi3,L170T460W50H20,Ğ¶ÔØ,TEAM ENVI @Edit4.Visible=1|ENVI @Edit6.Visible=0|ENVI @Edit7.Visible=0|ENVI @Edit5.Visible=0|ENVI @Labe22.Visible=0
+    EDIT. Edit4,L90T379W230H20,,,0x100,,10:ËÎÌå
     ENVI @Edit4.MSG=0x0203:CALL SetEdit4 
-    EDIT. Edit5,L90T404W230H20,,,0x100,,10:å®‹ä½“
+    EDIT. Edit5,L90T404W230H20,,,0x100,,10:ËÎÌå
     ENVI @Edit5.MSG=0x0203:CALL SetEdit5
-    EDIT. Edit6,L90T379W230H20,,,0x100,,10:å®‹ä½“
+    EDIT. Edit6,L90T379W230H20,,,0x100,,10:ËÎÌå
     ENVI @Edit6.MSG=0x0203:CALL SetEdit6
-    EDIT. Edit7,L90T404W230H20,,,0x100,,10:å®‹ä½“
+    EDIT. Edit7,L90T404W230H20,,,0x100,,10:ËÎÌå
     ENVI @Edit7.MSG=0x0203:CALL SetEdit7  
-    ITEM Item28,L20T460W50H20,æ‰§è¡Œ,CALL @wimstart
+    ITEM Item28,L20T460W50H20,Ö´ĞĞ,CALL @wimstart
+    //ITEM Item29,L20T480W50H20,ÖÕÖ¹,KILL *%varname%
     PBAR Pbar1,L90T430W230H20,
-    LABE Labe23,L20T431W70H20,å®Œæˆè¿›åº¦
+    LABE Labe23,L20T431W70H20,Íê³É½ø¶È
     GROU Grou8,L15T355W320H135,wimlib
-    LABE Labe1,L375T197W65H20,è°ƒæ•´äº®åº¦
+    LABE Labe1,L375T197W65H20,µ÷ÕûÁÁ¶È
     EDIT. Edit3,L440T195W30H20
-    ITEM Item21,L475T192W50H25,è®¾ç½®,CALL @brightness
+    ITEM Item21,L475T192W50H25,ÉèÖÃ,CALL @brightness
     ITEM Item22,L385T222W30H20,30,TEAM ENVI @Edit3=30|CALL @brightness
     ITEM Item23,L420T222W30H20,50,TEAM ENVI @Edit3=50|CALL @brightness
     ITEM Item24,L455T222W30H20,60,TEAM ENVI @Edit3=60|CALL @brightness
@@ -115,25 +117,25 @@ _SUB WIN1,W%w1%H535,å·¥å…·ç®±,KILL  *%&__PID%,,,,-scale:%&LOGPIXELSX%
     ITEM Item26,L525T222W30H20,90,TEAM ENVI @Edit3=90|CALL @brightness
     ITEM Item27,L530T195W30H20,100,TEAM ENVI @Edit3=100|CALL @brightness
     GROU Grou5,L370T175W195H90,WinXShell
-    ITEM Item17,L625T205W50H30,æ‰§è¡Œ,TEAM KILL explorer|EXEC explorer
-    GROU Grou6,L570T175W175H90,é‡å¯èµ„æºç®¡ç†å™¨
-    GROU Grou7,L365T20W385H400,PEä¸‹ä½¿ç”¨
-    ENVI @Edit1.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "é¼ æ ‡åŒå‡»é€‰æ‹©æ–‡ä»¶"
+    ITEM Item17,L625T205W50H30,Ö´ĞĞ,CALL @reexplorer
+    GROU Grou6,L570T175W175H90,ÖØÆô×ÊÔ´¹ÜÀíÆ÷
+    GROU Grou7,L365T20W385H400,PEÏÂÊ¹ÓÃ
+    ENVI @Edit1.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "Êó±êË«»÷Ñ¡ÔñÎÄ¼ş"
     ENVI @Edit1.MSG=%&WM_MOUSELEAVE%: TIPS -
-    ENVI @Edit2.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "é¼ æ ‡åŒå‡»é€‰æ‹©æ–‡ä»¶"
+    ENVI @Edit2.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "Êó±êË«»÷Ñ¡ÔñÎÄ¼ş"
     ENVI @Edit2.MSG=%&WM_MOUSELEAVE%: TIPS -
-    ENVI @Edit3.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "å¡«å…¥äº®åº¦æ•°å€¼"
+    ENVI @Edit3.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "ÌîÈëÁÁ¶ÈÊıÖµ"
     ENVI @Edit3.MSG=%&WM_MOUSELEAVE%: TIPS -
-    ENVI @Item0.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "å±•å¼€æ›´å¤š"
+    ENVI @Item0.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "Õ¹¿ª¸ü¶à"
     ENVI @Item0.MSG=%&WM_MOUSELEAVE%: TIPS -
-    ENVI @Item01.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "æŠ˜å "
+    ENVI @Item01.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "ÕÛµş"
     ENVI @Item01.MSG=%&WM_MOUSELEAVE%: TIPS -
-    ENVI @Edit4.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "é¼ æ ‡åŒå‡»é€‰æ‹©è·¯å¾„"
+    ENVI @Edit4.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "Êó±êË«»÷Ñ¡ÔñÂ·¾¶"
     ENVI @Edit4.MSG=%&WM_MOUSELEAVE%: TIPS -
-    ENVI @Edit5.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "é¼ æ ‡åŒå‡»é€‰æ‹©è·¯å¾„"
+    ENVI @Edit5.MSG=%&WM_MOUSEHOVER%: CALL Mouse_In_TIPS SEL01 "Êó±êË«»÷Ñ¡ÔñÂ·¾¶"
     ENVI @Edit5.MSG=%&WM_MOUSELEAVE%: TIPS -
 _END
-_SUB Mouse_In_TIPS			//æ°”æ³¡æ˜¾ç¤ºæŒ‡å®šçš„ä¿¡æ¯
+_SUB Mouse_In_TIPS			//ÆøÅİÏÔÊ¾Ö¸¶¨µÄĞÅÏ¢
     TEAM TIPS -| ENVI &ShowHot=
     ENVI @%1.POS=?@&CurX:&CurY:@&CurW:&CurH
     ENVI @@Cur=?&CurXM;&CurYM
@@ -148,63 +150,72 @@ _END
 _SUB encrypt
     FDIR fPath="%Edit2%"
     NAME -ext fNam1="%Edit2%"
-    CMPS "%Edit2%" "%fPath%\åŠ å¯†_%fNam1%"
+    CMPS "%Edit2%" "%fPath%\¼ÓÃÜ_%fNam1%"
 _END
 _SUB compress
     FDIR fPath="%Edit2%"
     NAME -ext fNam1="%Edit2%"
-    CMPS -m "%Edit2%" "%fPath%\å‹ç¼©_%fNam1%"
+    CMPS -m "%Edit2%" "%fPath%\Ñ¹Ëõ_%fNam1%"
 _END
 _SUB uncompressed
     FDIR fPath="%Edit2%"
     NAME -ext fNam1="%Edit2%"
-    CMPS -u "%Edit2%" "%fPath%\è§£å‹_%fNam1%"
+    CMPS -u "%Edit2%" "%fPath%\½âÑ¹_%fNam1%"
 _END
 _SUB filelocation
-    IFEX '%image1%'='#1|PNG',{
+    IFEX '%image1%'='#1|PNG',
+    {
     ENVI @Imag1.update=:::::;#2|PNG
     ENVI image1=#2|PNG
     REGI $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\!
     EXIT
     }
-    IFEX '%image1%'='#2|PNG',{
+    IFEX '%image1%'='#2|PNG',
+    {
     ENVI @Imag1.update=:::::;#1|PNG
     ENVI image1=#1|PNG
-    REGI $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\=æ‰“å¼€æ–‡ä»¶ä½ç½®(&E)
+    REGI $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\=´ò¿ªÎÄ¼şÎ»ÖÃ(&E)
     REGI $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\\icon=explorer.exe,0
     REGI $HKEY_CLASSES_ROOT\lnkfile\shell\OpensLnkFiles\command\\=cmd /c for /f "delims=" %%%%i in ('find ":" "%%1" ^|findstr /r "^[A-z]:[\\]"')do start explorer /select,"%%%%i"
+    }
 _END
 _SUB CMD
-    IFEX '%image2%'='#1|PNG',{
+    IFEX '%image2%'='#1|PNG',
+    {
     ENVI @Imag2.update=:::::;#2|PNG
     ENVI image2=#2|PNG
     REGI $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\!
     EXIT
     }
-    IFEX '%image2%'='#2|PNG',{
+    IFEX '%image2%'='#2|PNG',
+    {
     ENVI @Imag2.update=:::::;#1|PNG
     ENVI image2=#1|PNG
-    REGI $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\=æ­¤å¤„æ‰“å¼€å‘½ä»¤
+    REGI $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\=´Ë´¦´ò¿ªÃüÁî
     REGI $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\\Icon=cmd.exe
     REGI $HKEY_CLASSES_ROOT\Directory\background\shell\OpenCmd\Command\\=cmd.exe
+    }
 _END
 _SUB permissions
-    IFEX '%image3%'='#1|PNG',{
+    IFEX '%image3%'='#1|PNG',
+    {
     ENVI @Imag3.update=:::::;#2|PNG
     ENVI image3=#2|PNG
-    REGI $HKEY_CLASSES_ROOT\*\shell\ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ\\!
-    REGI $HKEY_CLASSES_ROOT\Directory\shell\ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ\\!
+    REGI $HKEY_CLASSES_ROOT\*\shell\¹ÜÀíÔ±È¡µÃËùÓĞÈ¨\\!
+    REGI $HKEY_CLASSES_ROOT\Directory\shell\¹ÜÀíÔ±È¡µÃËùÓĞÈ¨\\!
     EXIT
     }
-    IFEX '%image3%'='#2|PNG',{
+    IFEX '%image3%'='#2|PNG',
+    {
     ENVI @Imag3.update=:::::;#1|PNG
     ENVI image3=#1|PNG
-    REGI $HKEY_CLASSES_ROOT\*\shell\ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ\\=ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ
-    REGI $HKEY_CLASSES_ROOT\*\shell\ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ\\Icon=imageres.dll,169
-    REGI $HKEY_CLASSES_ROOT\*\shell\ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ\command\\=cmd.exe /c takeown /f "%%1" && icacls "%%1" /grant administrators:F
-    REGI $HKEY_CLASSES_ROOT\Directory\shell\ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ\\=ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ
-    REGI $HKEY_CLASSES_ROOT\Directory\shell\ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ\\Icon=imageres.dll,169
-    REGI $HKEY_CLASSES_ROOT\Directory\shell\ç®¡ç†å‘˜å–å¾—æ‰€æœ‰æƒ\command\\=cmd.exe /c takeown /f "%%1" /r /d y && icacls "%%1" /grant administrators:F /t
+    REGI $HKEY_CLASSES_ROOT\*\shell\¹ÜÀíÔ±È¡µÃËùÓĞÈ¨\\=¹ÜÀíÔ±È¡µÃËùÓĞÈ¨
+    REGI $HKEY_CLASSES_ROOT\*\shell\¹ÜÀíÔ±È¡µÃËùÓĞÈ¨\\Icon=imageres.dll,169
+    REGI $HKEY_CLASSES_ROOT\*\shell\¹ÜÀíÔ±È¡µÃËùÓĞÈ¨\command\\=cmd.exe /c takeown /f "%%1" && icacls "%%1" /grant administrators:F
+    REGI $HKEY_CLASSES_ROOT\Directory\shell\¹ÜÀíÔ±È¡µÃËùÓĞÈ¨\\=¹ÜÀíÔ±È¡µÃËùÓĞÈ¨
+    REGI $HKEY_CLASSES_ROOT\Directory\shell\¹ÜÀíÔ±È¡µÃËùÓĞÈ¨\\Icon=imageres.dll,169
+    REGI $HKEY_CLASSES_ROOT\Directory\shell\¹ÜÀíÔ±È¡µÃËùÓĞÈ¨\command\\=cmd.exe /c takeown /f "%%1" /r /d y && icacls "%%1" /grant administrators:F /t
+    }
 _END
 _SUB DPI
     #code=950T936
@@ -215,13 +226,14 @@ _SUB DPI
     ifex $%dpi%>250, set num=50! set num=25
     calc #dpix=(%dpi%-100)/%num%+%vParam%
     call $--qd# user32.dll,SystemParametersInfoW,159,%dpix%,0,1
-    KILL explorer
+    CALL @reexplorer
 _END
 _SUB filecopy
     LOAD #103
 _END
 _SUB linkpecmd
-    IFEX '%image4%'='#1|PNG',{
+    IFEX '%image4%'='#1|PNG',
+    {
     ENVI @Imag4.update=:::::;#2|PNG
     ENVI image4=#2|PNG
     IFEX %SystemRoot%\SYSTEM32\PECMD.NTR ENVI PECMD=PECMD.NTR
@@ -243,10 +255,11 @@ _SUB linkpecmd
     REGI HKCR\inifile\shell\PECMD\=
     REGI HKCR\inifile\shell\PECMD\command\=
     REGI HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\PATHEXT=
-    KILL explorer
+    CALL @reexplorer
     EXIT
     }
-    IFEX '%image4%'='#2|PNG',{
+    IFEX '%image4%'='#2|PNG',
+    {
     ENVI @Imag4.update=:::::;#1|PNG
     ENVI image4=#1|PNG
     IFEX %SystemRoot%\SYSTEM32\PECMD.NTR ENVI PECMD=PECMD.NTR
@@ -256,106 +269,138 @@ _SUB linkpecmd
     REGI HKCR\.wcs\=wcsfile
     REGI HKCR\.wce\=wcsfile
     REGI HKCR\.wcx\=wcsfile
-    REGI HKCR\wcsfile\=WCS è„šæœ¬æ–‡ä»¶
+    REGI HKCR\wcsfile\=WCS ½Å±¾ÎÄ¼ş
     REGI HKCR\wcsfile\DefaultIcon\=%SystemRoot%\SYSTEM32\PECMD.exe,0
     REGI HKCR\wcsfile\shell\open\command\=PECMD LOAD %L
     REGI HKCR\wcsfile\shell\Edit\command\=notepad %L
     REGI HKCR\.wcz\=wczfile
-    REGI HKCR\wczfile\=WCZ è„šæœ¬æ–‡ä»¶
+    REGI HKCR\wczfile\=WCZ ½Å±¾ÎÄ¼ş
     REGI HKCR\wczfile\DefaultIcon\=%SystemRoot%\SYSTEM32\PECMD.exe,0
     REGI HKCR\wczfile\shell\open\command\=PECMD.exe LOAD %L
     REGI HKCR\wczfile\shell\Edit\command\=notepad %L
-    REGI HKCR\inifile\shell\PECMD\=ä½œä¸ºPECMDè„šæœ¬è¿è¡Œ
+    REGI HKCR\inifile\shell\PECMD\=×÷ÎªPECMD½Å±¾ÔËĞĞ
     REGI HKCR\inifile\shell\PECMD\command\=PECMD.exe LOAD %L
     REGI HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\PATHEXT=.COM;.EXE;.NTR;.NTE;.NTX;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.WCS;.WCE;.WCX;.WCZ
-    KILL explorer
+    CALL @reexplorer
+    }
 _END
 _SUB offautosrrange
-    IFEX '%image5%'='#1|PNG',{
+    IFEX '%image5%'='#1|PNG',
+    {
     ENVI @Imag5.update=:::::;#2|PNG
     ENVI image5=#2|PNG
     REGI --16 #HKU\.DEFAULT\Software\Microsoft\Windows\Shell\Bags\1\Desktop\FFlags=40200224
-    KILL explorer
+    CALL @reexplorer
     EXIT
     }
-    IFEX '%image5%'='#2|PNG',{
+    IFEX '%image5%'='#2|PNG',
+    {
     ENVI @Imag5.update=:::::;#1|PNG
     ENVI image5=#1|PNG
     REGI --16 #HKU\.DEFAULT\Software\Microsoft\Windows\Shell\Bags\1\Desktop\FFlags=40200225
-    KILL explorer
+    CALL @reexplorer
+    }
 _END
 _SUB nofixedexplorer
-    IFEX '%image6%'='#1|PNG',{
+    IFEX '%image6%'='#1|PNG',
+    {
     ENVI @Imag6.update=:::::;#2|PNG
     ENVI image6=#2|PNG
     REGI @HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband\Favorites=0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-    kill explorer
+    CALL @reexplorer
     EXIT
     }
-    IFEX '%image6%'='#2|PNG',{
+    IFEX '%image6%'='#2|PNG',
+    {
     ENVI @Imag6.update=:::::;#1|PNG
     ENVI image6=#1|PNG
     REGI @HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband\Favorites=0x00 0x78 0x01 0x00 0x00 0x3A 0x00 0x1F 0x80 0xC8 0x27 0x34 0x1F 0x10 0x5C 0x10 0x42 0xAA 0x03 0x2E 0xE4 0x52 0x87 0xD6 0x68 0x26 0x00 0x01 0x00 0x26 0x00 0xEF 0xBE 0x12 0x00 0x00 0x00 0x23 0x08 0xF8 0xE3 0x33 0x59 0xD6 0x01 0x23 0x08 0xF8 0xE3 0x33 0x59 0xD6 0x01 0x94 0x23 0xC1 0xE7 0x33 0x59 0xD6 0x01 0x14 0x00 0x56 0x00 0x31 0x00 0x00 0x00 0x00 0x00 0xED 0x50 0xB1 0x84 0x30 0x00 0x54 0x61 0x73 0x6B 0x42 0x61 0x72 0x00 0x40 0x00 0x09 0x00 0x04 0x00 0xEF 0xBE 0xED 0x50 0xB1 0x84 0xED 0x50 0xB1 0x84 0x2E 0x00 0x00 0x00 0x86 0x16 0x00 0x00 0x1F 0xFB 0x0F 0xFB 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x6C 0xF7 0x2A 0x01 0x54 0x00 0x61 0x00 0x73 0x00 0x6B 0x00 0x42 0x00 0x61 0x00 0x72 0x00 0x00 0x00 0x16 0x00 0xE6 0x00 0x32 0x00 0x1D 0x03 0x00 0x00 0xED 0x50 0xB1 0x84 0x20 0x00 0x57 0x49 0x4E 0x44 0x4F 0x57 0x7E 0x31 0x2E 0x4C 0x4E 0x4B 0x00 0x00 0x54 0x00 0x09 0x00 0x04 0x00 0xEF 0xBE 0xED 0x50 0xB1 0x84 0xED 0x50 0xB1 0x84 0x2E 0x00 0x00 0x00 0x87 0x16 0x00 0x00 0x1F 0xFB 0x0F 0xFB 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x6C 0xF7 0x2A 0x01 0x57 0x00 0x69 0x00 0x6E 0x00 0x64 0x00 0x6F 0x00 0x77 0x00 0x73 0x00 0x20 0x00 0x44 0x8D 0x90 0x6E 0xA1 0x7B 0x06 0x74 0x68 0x56 0x2E 0x00 0x6C 0x00 0x6E 0x00 0x6B 0x00 0x00 0x00 0x1C 0x00 0x12 0x00 0x00 0x00 0x2B 0x00 0xEF 0xBE 0x94 0x23 0xC1 0xE7 0x33 0x59 0xD6 0x01 0x1C 0x00 0x42 0x00 0x00 0x00 0x1D 0x00 0xEF 0xBE 0x02 0x00 0x4D 0x00 0x69 0x00 0x63 0x00 0x72 0x00 0x6F 0x00 0x73 0x00 0x6F 0x00 0x66 0x00 0x74 0x00 0x2E 0x00 0x57 0x00 0x69 0x00 0x6E 0x00 0x64 0x00 0x6F 0x00 0x77 0x00 0x73 0x00 0x2E 0x00 0x45 0x00 0x78 0x00 0x70 0x00 0x6C 0x00 0x6F 0x00 0x72 0x00 0x65 0x00 0x72 0x00 0x00 0x00 0x1C 0x00 0x22 0x00 0x00 0x00 0x1E 0x00 0xEF 0xBE 0x02 0x00 0x55 0x00 0x73 0x00 0x65 0x00 0x72 0x00 0x50 0x00 0x69 0x00 0x6E 0x00 0x6E 0x00 0x65 0x00 0x64 0x00 0x00 0x00 0x1C 0x00 0x00 0x00 0xFF
-    kill explorer
-}
+    CALL @reexplorer
+    }
 _END
 _SUB brightness
     EXEC %ProgramFiles%\WinXShell\WinXShell.exe -code Screen:Set('brightness',%Edit3%)
 _END
 _SUB wimstart
-    FIND $%Radi1.Check%=1,CALL @wimlibcapture
-    FIND $%Radi2.Check%=1,CALL @wimlibapply 
+    FIND $%Radi1.Check%=1,THREAD* CALL @wimlibcapture
+    FIND $%Radi2.Check%=1,THREAD* CALL @wimlibapply
+    FIND $%Radi3.Check%=1,{
+    //SIZE iSize=%Edit4%
+    //CALC iSizem=%iSize%/1048576
+    //MESS. %iSizem%
+    //TIME Timer1,1000,THREAD* CALL @pbarp
+    THREAD* CALL @uninstall     
+    }
 _END    
 _SUB wimlibcapture
-    EXEC* -err+ -code:ANSI -cmd:OnTransNL1  --exe:*cab:#100:wimlib-imagex.exe &OutVar1=!wimlib-imagex.exe capture "%Edit4%" "%Edit5%" --boot
+    EXEC* -err+ -code:ANSI -cmd:OnTransNL1 -pid:varname --exe:*cab:#100:wimlib-imagex.exe &OutVar1=!wimlib-imagex.exe capture "%Edit4%" "%Edit5%" --boot
 _END
 _SUB wimlibapply
-    EXEC* -err+ -code:ANSI -cmd:OnTransNL2  --exe:*cab:#100:wimlib-imagex.exe &OutVar2=!wimlib-imagex.exe apply %Edit6% %Edit7%
+    EXEC* -err+ -code:ANSI -cmd:OnTransNL2 -pid:varname --exe:*cab:#100:wimlib-imagex.exe &OutVar2=!wimlib-imagex.exe apply %Edit6% %Edit7%
 _END
 _SUB OnTransNL1 *
 //MESS. aaa
-    SED &&æ‰“åŒ…è¿›åº¦=0,\n,\r\n,%&OutVar1%
-    LPOS* * ,*&å®šä½è¡Œæ•°=Archiving,,&æ‰“åŒ…è¿›åº¦
-    MSTR &æœ€åä¸€è¡Œ=<-1>%&å®šä½è¡Œæ•°%
-//MESS. %&æœ€åä¸€è¡Œ%
-    FIND |%&æœ€åä¸€è¡Œ%>0,
+    SED &&´ò°ü½ø¶È=0,\n,\r\n,%&OutVar1%
+    LPOS* * ,*&¶¨Î»ĞĞÊı=Archiving,,&´ò°ü½ø¶È
+    MSTR &×îºóÒ»ĞĞ=<-1>%&¶¨Î»ĞĞÊı%
+//MESS. %&×îºóÒ»ĞĞ%
+    FIND |%&×îºóÒ»ĞĞ%>0,
     {*
-    READ  -,%&æœ€åä¸€è¡Œ%,&å†…å®¹,%&æ‰“åŒ…è¿›åº¦%
-    MSTR &è¿›åº¦=<9>%&å†…å®¹%
+    READ  -,%&×îºóÒ»ĞĞ%,&ÄÚÈİ,%&´ò°ü½ø¶È%
+    MSTR &½ø¶È=<9>%&ÄÚÈİ%
 
-    MSTR -delims:( &ç™¾åˆ†æ¯”=<2>%&è¿›åº¦%
-    LPOS &ç™¾åˆ†æ¯”æ•°=%,1,%&ç™¾åˆ†æ¯”%
-    CALC &ç™¾åˆ†æ¯”æ•°=%&ç™¾åˆ†æ¯”æ•°%-1
-    MSTR &ç™¾åˆ†æ¯”=1,%&ç™¾åˆ†æ¯”æ•°%,%&ç™¾åˆ†æ¯”%
-    ENVI &PA=%&ç™¾åˆ†æ¯”%%
-    ENVI @Pbar1=%&ç™¾åˆ†æ¯”%;#0X000000:å·²å®Œæˆ%&PA%
+    MSTR -delims:( &°Ù·Ö±È=<2>%&½ø¶È%
+    LPOS &°Ù·Ö±ÈÊı=%,1,%&°Ù·Ö±È%
+    CALC &°Ù·Ö±ÈÊı=%&°Ù·Ö±ÈÊı%-1
+    MSTR &°Ù·Ö±È=1,%&°Ù·Ö±ÈÊı%,%&°Ù·Ö±È%
+    ENVI &PA=%&°Ù·Ö±È%%
+    ENVI @Pbar1=%&°Ù·Ö±È%;#0X000000:ÒÑÍê³É%&PA%
     }
-//MESS. %&ç™¾åˆ†æ¯”%
+//MESS. %&°Ù·Ö±È%
 _END
 _SUB OnTransNL2 *
 //MESS. aaa
-    SED &&é‡Šæ”¾è¿›åº¦=0,\n,\r\n,%&OutVar2%
-    TEAM LPOS* * ,*&å®šä½è¡Œæ•°1=Creating files,,&é‡Šæ”¾è¿›åº¦|LPOS* * ,*&å®šä½è¡Œæ•°2=Extracting file data,,&é‡Šæ”¾è¿›åº¦|LPOS* * ,*&å®šä½è¡Œæ•°3=Applying metadata to files,,&é‡Šæ”¾è¿›åº¦
-    IFEX [ $%&å®šä½è¡Œæ•°1%<>0 & $%&å®šä½è¡Œæ•°2%=0 ],MSTR &æœ€åä¸€è¡Œ=<-1>%&å®šä½è¡Œæ•°1%
-    IFEX [ $%&å®šä½è¡Œæ•°2%<>0 & $%&å®šä½è¡Œæ•°3%=0 ],MSTR &æœ€åä¸€è¡Œ=<-1>%&å®šä½è¡Œæ•°2%
-    IFEX [ $%&å®šä½è¡Œæ•°2%<>0 & $%&å®šä½è¡Œæ•°3%<>0 ],MSTR &æœ€åä¸€è¡Œ=<-1>%&å®šä½è¡Œæ•°3%
+    SED &&ÊÍ·Å½ø¶È=0,\n,\r\n,%&OutVar2%
+    TEAM LPOS* * ,*&¶¨Î»ĞĞÊı1=Creating files,,&ÊÍ·Å½ø¶È|LPOS* * ,*&¶¨Î»ĞĞÊı2=Extracting file data,,&ÊÍ·Å½ø¶È|LPOS* * ,*&¶¨Î»ĞĞÊı3=Applying metadata to files,,&ÊÍ·Å½ø¶È
+    IFEX [ $%&¶¨Î»ĞĞÊı1%<>0 & $%&¶¨Î»ĞĞÊı2%=0 ],MSTR &×îºóÒ»ĞĞ=<-1>%&¶¨Î»ĞĞÊı1%
+    IFEX [ $%&¶¨Î»ĞĞÊı2%<>0 & $%&¶¨Î»ĞĞÊı3%=0 ],MSTR &×îºóÒ»ĞĞ=<-1>%&¶¨Î»ĞĞÊı2%
+    IFEX [ $%&¶¨Î»ĞĞÊı2%<>0 & $%&¶¨Î»ĞĞÊı3%<>0 ],MSTR &×îºóÒ»ĞĞ=<-1>%&¶¨Î»ĞĞÊı3%
 
-//MESS. %&æœ€åä¸€è¡Œ%
-    FIND |%&æœ€åä¸€è¡Œ%>0,
+//MESS. %&×îºóÒ»ĞĞ%
+    FIND |%&×îºóÒ»ĞĞ%>0,
     {*
-    READ  -,%&æœ€åä¸€è¡Œ%,&å†…å®¹,%&é‡Šæ”¾è¿›åº¦%
-    IFEX [ $%&å®šä½è¡Œæ•°1%<>0 & $%&å®šä½è¡Œæ•°2%=0 ],MSTR &è¿›åº¦=<6>%&å†…å®¹%
-    IFEX [ $%&å®šä½è¡Œæ•°2%<>0 & $%&å®šä½è¡Œæ•°3%=0 ],MSTR &è¿›åº¦=<9>%&å†…å®¹%
-    IFEX [ $%&å®šä½è¡Œæ•°2%<>0 & $%&å®šä½è¡Œæ•°3%<>0 ],MSTR &è¿›åº¦=<8>%&å†…å®¹%
+    READ  -,%&×îºóÒ»ĞĞ%,&ÄÚÈİ,%&ÊÍ·Å½ø¶È%
+    IFEX [ $%&¶¨Î»ĞĞÊı1%<>0 & $%&¶¨Î»ĞĞÊı2%=0 ],MSTR &½ø¶È=<6>%&ÄÚÈİ%
+    IFEX [ $%&¶¨Î»ĞĞÊı2%<>0 & $%&¶¨Î»ĞĞÊı3%=0 ],MSTR &½ø¶È=<9>%&ÄÚÈİ%
+    IFEX [ $%&¶¨Î»ĞĞÊı2%<>0 & $%&¶¨Î»ĞĞÊı3%<>0 ],MSTR &½ø¶È=<8>%&ÄÚÈİ%
 
-    MSTR -delims:( &ç™¾åˆ†æ¯”=<2>%&è¿›åº¦%
-    LPOS &ç™¾åˆ†æ¯”æ•°=%,1,%&ç™¾åˆ†æ¯”%
-    CALC &ç™¾åˆ†æ¯”æ•°=%&ç™¾åˆ†æ¯”æ•°%-1
-    MSTR &ç™¾åˆ†æ¯”=1,%&ç™¾åˆ†æ¯”æ•°%,%&ç™¾åˆ†æ¯”%
-    ENVI &PA=%&ç™¾åˆ†æ¯”%%
-    IFEX [ $%&å®šä½è¡Œæ•°1%<>0 & $%&å®šä½è¡Œæ•°2%=0 ],ENVI @Pbar1=%&ç™¾åˆ†æ¯”%;#0X000000:æ­£åœ¨åˆ›å»ºæ–‡ä»¶%&PA%
-    IFEX [ $%&å®šä½è¡Œæ•°2%<>0 & $%&å®šä½è¡Œæ•°3%=0 ],ENVI @Pbar1=%&ç™¾åˆ†æ¯”%;#0X000000:æ­£åœ¨æå–æ–‡ä»¶æ•°æ®%&PA%
-    IFEX [ $%&å®šä½è¡Œæ•°2%<>0 & $%&å®šä½è¡Œæ•°3%<>0 ],ENVI @Pbar1=%&ç™¾åˆ†æ¯”%;#0X000000:æ­£åœ¨å°†å…ƒæ•°æ®åº”ç”¨äºæ–‡ä»¶%&PA%
+    MSTR -delims:( &°Ù·Ö±È=<2>%&½ø¶È%
+    LPOS &°Ù·Ö±ÈÊı=%,1,%&°Ù·Ö±È%
+    CALC &°Ù·Ö±ÈÊı=%&°Ù·Ö±ÈÊı%-1
+    MSTR &°Ù·Ö±È=1,%&°Ù·Ö±ÈÊı%,%&°Ù·Ö±È%
+    ENVI &PA=%&°Ù·Ö±È%%
+    IFEX [ $%&¶¨Î»ĞĞÊı1%<>0 & $%&¶¨Î»ĞĞÊı2%=0 ],ENVI @Pbar1=%&°Ù·Ö±È%;#0X000000:ÕıÔÚ´´½¨ÎÄ¼ş%&PA%
+    IFEX [ $%&¶¨Î»ĞĞÊı2%<>0 & $%&¶¨Î»ĞĞÊı3%=0 ],ENVI @Pbar1=%&°Ù·Ö±È%;#0X000000:ÕıÔÚÌáÈ¡ÎÄ¼şÊı¾İ%&PA%
+    IFEX [ $%&¶¨Î»ĞĞÊı2%<>0 & $%&¶¨Î»ĞĞÊı3%<>0 ],
+    {
+    ENVI @Pbar1=%&°Ù·Ö±È%;#0X000000:ÕıÔÚ½«ÔªÊı¾İÓ¦ÓÃÓÚÎÄ¼ş%&PA%
+    IFEX '%&PA%'='100%',ENVI @Pbar1=%&°Ù·Ö±È%;#0X000000:ÊÍ·ÅÎÄ¼şÒÑÍê³É
     }
-//MESS. %&ç™¾åˆ†æ¯”%
+    }
+//MESS. %&°Ù·Ö±È%
+_END
+_SUB uninstall
+    FILE -progress %Edit4%
+_END
+//_SUB pbarp
+//    SIZE iSize1=%Edit4%
+//    CALC iSizem1=%iSize1%/1048576
+//    CALC iSizem2=%iSizem%-%iSize1m%
+//    CALC iSizem3=%iSizem2%/%iSizem%*100
+//    CALC pbarr=floor(%iSizem3%)
+//    ENVI &PA=%pbarr%%
+//    ENVI @Pbar1=%pbarr%;#0X000000:ÒÑÍê³É%&PA%
+//_END
+_SUB reexplorer
+    IFEX '%pe%'='2',KILL explorer! EXEC =!CMD.EXE /C "taskkill /f /im explorer.exe & start explorer.exe"
 _END
